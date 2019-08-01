@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<title>算术</title>
+		<meta name="wap-font-scale" content="no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		
+		<style>
+			.btn { display: block; position: relative; background: #aaa; padding: 5px; float: left; color: #fff; text-decoration: none; cursor: pointer; }
+			.btn * { font-style: normal; background-image: url(btn2.png); background-repeat: no-repeat; display: block; position: relative; }
+			.btn i { background-position: top left; position: absolute; margin-bottom: -5px;  top: 0; left: 0; width: 5px; height: 5px; }
+			.btn span { background-position: bottom left; left: -5px; padding: 0 0 5px 10px; margin-bottom: -5px; }
+			.btn span i { background-position: bottom right; margin-bottom: 0; position: absolute; left: 100%; width: 10px; height: 100%; top: 0; }
+			.btn span span { background-position: top right; position: absolute; right: -10px; margin-left: 10px; top: -5px; height: 0; }
+			* html .btn span,
+			* html .btn i { float: left; width: auto; background-image: none; cursor: pointer; }
+			.btn.blue { background: #2ae; }
+			.btn.green { background: #9d4; }
+			.btn.pink { background: #e1a; }
+			.btn.yellow { background: #CCFF00; }
+			.btn.chocolate { background: #D2691E; }
+			.btn.lightblue { background: #00FFFF; }
+			.btn.lightred { background: #FF00FF; }
+			.btn.gray { background: #C0C0C0; }
+			.btn.lightgreen { background: #00FF33; }
+			
+			.btn:hover { background-color: #a00; }
+			.btn:active { background-color: #444; }
+			* html .btn { border: 3px double #aaa; }
+			* html .btn.blue { border-color: #2ae; }
+			* html .btn.green { border-color: #9d4; }
+			* html .btn.pink { border-color: #e1a; }
+			* html .btn:hover { border-color: #a00; }
+			p { clear: both; padding-bottom: 2em; }
+		</style>
+	</head>
+	<body>
+		<p><a href="javascript:print('1')" class="btn blue big"> 三位数加法（OK） </a></p>
+		<p><a href="javascript:print('2')" class="btn green big"> 三位数减法（OK） </a></p>
+		<p><a href="javascript:print('3')" class="btn pink big"> 两位数加法（OK） </a></p>
+		<p><a href="javascript:print('9')" class="btn chocolate big"> 两位数减法（OK） </a></p>
+		<p><a href="javascript:print('4')" class="btn yellow big"> 四个两位数相加（OK） </a></p>
+		<p><a href="javascript:print('5')" class="btn lightblue big"> 两位数乘以一位数（OK）</a></p>
+		<p><a href="javascript:print('6')" class="btn lightred big"> 两位数乘以两位数（OK） </a></p>
+		<p><a href="javascript:print('7')" class="btn gray big"> 三位数除于两位数（OK） </a></p>
+		<p><a href="javascript:print('8')" class="btn lightgreen big"> 三位数除于三位数（OK） </a></p>
+		<!--<p><a href="#" class="btn green">This should be a green button</a></p>
+		<p><big><a href="#" class="btn blue big">Big Text</a></big></p>-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" 
+		integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" 
+		crossorigin="anonymous">
+		</script>
+		<script>
+			var maxWidth = 200;
+			var maxHeigth = 300;
+			
+			// 下载题目及答案
+			function print(type)
+			{
+				var doc = new jsPDF();
+				var left = getLeft(type);
+				var answerArr = [];
+				for(var i = 0;i < parseInt((maxHeigth-10)/10);i++)
+				{
+					for(var j = 0;j < parseInt((maxWidth - 10)/left);j++)
+					{
+						var arr = getResult(type);
+						doc.text(10+left*j, 10+10*i, arr[0]);
+						var arr1 = [];
+						arr1[0] = 10+left*j;
+						arr1[1] = 10+10*i;
+						arr1[2] = arr[1]
+						answerArr.push(arr1);
+					}
+				}
+				doc.addPage();
+				for(var i = 0;i < answerArr.length;i ++)
+				{
+					var arr = answerArr[i];
+					doc.text(arr[0], arr[1], arr[2]);
+				}
+				doc.save(getName(type))
+			}
+			// 获取公式间距
+			function getLeft(type){
+				var left = 0;
+				if(type == '1')
+				{
+					left = 50;
+				}else if(type == '2')
+				{
+					left = 45;
+				}else if(type == '3')
+				{
+					left = 45;
+				}else if(type == '4')
+				{
+					left = 60;
+				}else if(type == '5')
+				{
+					left = 45;
+				}else if(type == '6')
+				{
+					left = 45;
+				}else if(type == '7')
+				{
+					left = 45;
+				}else if(type == '8')
+				{
+					left = 45;
+				}else if(type == '9')
+				{
+					left = 45;
+				}
+				return left;
+			}
+			// 获取下载PDF文件名
+			function getName(type){
+				var pdfFileName = '运算';
+				if(type == '1')
+				{
+					pdfFileName = '三位数加法.pdf';
+				}else if(type == '2')
+				{
+					pdfFileName = '三位数减法.pdf';
+				}else if(type == '3')
+				{
+					pdfFileName = '两位数加法.pdf';
+				}else if(type == '9')
+				{
+					pdfFileName = '两位数减法.pdf';
+				}else if(type == '4')
+				{
+					pdfFileName = '四个两位数相加.pdf';
+				}else if(type == '5')
+				{
+					pdfFileName = '两位数乘以一位数.pdf';
+				}else if(type == '6')
+				{
+					pdfFileName = '两位数乘以两位数.pdf';
+				}else if(type == '7')
+				{
+					pdfFileName = '三位数除于两位数.pdf';
+				}else if(type == '8')
+				{
+					pdfFileName = '三位数除于三位数.pdf';
+				}
+				return pdfFileName;
+			}
+			// 获取题目及答案数组
+			function getResult(type)
+			{
+				var resultArr = [];
+				if(type == '1')
+				{
+					resultArr = create3plus3();
+				}else if(type == '2')
+				{
+					resultArr = create3sub3();
+				}else if(type == '3')
+				{
+					resultArr = create2plus2();
+				}else if(type == '9')
+				{
+					resultArr = create2sub2();
+				}else if(type == '4')
+				{
+					resultArr = createfour2plus();
+				}else if(type == '5')
+				{
+					resultArr = create2mult1();
+				}else if(type == '6')
+				{
+					resultArr = create2mult2();
+				}else if(type == '7')
+				{
+					resultArr = create3div2();
+				}else if(type == '8')
+				{
+					resultArr = create3div3();
+				}
+				return resultArr;
+			}
+			// 三位数加法
+			function create3plus3(){
+				var a = createRandom(3);
+				var b = createRandom(3,a); 
+				var resultArr = [];
+				resultArr[0] = a + ' + ' + b + ' = ';
+				resultArr[1] = a + ' + ' + b + ' = ' + (a+b);
+				return resultArr;
+			}
+			// 三位数减法
+			function create3sub3(){
+				var a = createRandom(3);
+				var b = createRandom(3,a); 
+				if(a < b)
+				{
+					var temp = a;
+					a = b;
+					b = temp;
+				}
+				var resultArr = [];
+				resultArr[0] = a + ' - ' + b + ' = ';
+				resultArr[1] = a + ' - ' + b + ' = ' + (a-b);
+				return resultArr;
+			}
+			// 三位数除于三位数
+			function create3div3()
+			{
+				var a = createRandom(3);
+				var b = createRandom(3,a);
+				var resultArr = [];
+				resultArr[0] = a + ' ÷ ' + b + ' = ';
+				resultArr[1] = a + ' ÷ ' + b + ' = ' + (a/b).toFixed(2);
+				return resultArr;
+			}
+			// 两位数加法
+			function create2plus2()
+			{
+				var a = createRandom(2);
+				var b = createRandom(2,a);
+				var c = createRandom(1);
+				var resultArr = [];
+				resultArr[0] = a + ' + ' + b + ' = ';
+				resultArr[1] = a + ' + ' + b + ' = ' + (a + b);
+				return resultArr;
+			}
+			// 两位数加法
+			function create2sub2()
+			{
+				var a = createRandom(2);
+				var b = createRandom(2,a);
+				var resultArr = [];
+				if(a < b)
+				{
+					var temp = a;
+					a = b;
+					b = temp;
+				}
+				resultArr[0] = a + ' - ' + b + ' = ';
+				resultArr[1] = a + ' - ' + b + ' = ' + (a - b);
+				return resultArr;
+			}
+			// 四个两位数相加
+			function createfour2plus(){
+				var a = createRandom(2);
+				var b = createRandom(2,a);
+				var c = createRandom(2,b);
+				var d = createRandom(2,c);
+				var resultArr = [];
+				resultArr[0] = a + '+' + b + '+' + c + '+' + d + '=';
+				resultArr[1] = a + '+' + b + '+' + c + '+' + d + '=' + (a + b + c + d);
+				return resultArr;
+			}
+			// 两位数乘以一位数
+			function create2mult1(){
+				var a = createRandom(2);
+				var b = createRandom(1,1);
+				var resultArr = [];
+				resultArr[0] = a + ' × ' + b + ' = ';
+				resultArr[1] = a + ' × ' + b + ' = ' + (a*b);
+				return resultArr;
+			}
+			// 两位数乘以两位数
+			function create2mult2(){
+				var a = createRandom(2);
+				var b = createRandom(2,a);
+				var resultArr = [];
+				resultArr[0] = a + ' × ' + b + ' = ';
+				resultArr[1] = a + ' × ' + b + ' = ' + (a*b);
+				return resultArr;
+			}
+			// 三位数除于两位数
+			function create3div2()
+			{
+				var a = createRandom(3);
+				var b = createRandom(2);
+				var resultArr = [];
+				resultArr[0] = a + ' ÷ ' + b + ' = ';
+				resultArr[1] = a + ' ÷ ' + b + ' = ' + (a/b).toFixed(2);
+				return resultArr;
+			}
+			// 获取随机数
+			function createRandom(length,old)
+			{
+				var min = 1;
+				var max = 9;
+				for(var i=0;i<length-1;i++)
+				{
+					min = 10 * min;
+					max = 10 * max;
+				} 
+				var val = Math.floor(Math.random () * max) + min;
+				if(old && old == val)
+				{
+					return createRandom(length,old);
+				}else
+				{
+					return val;
+				}
+			}
+		</script>
+	</body>
+	
+</html>
